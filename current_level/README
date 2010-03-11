@@ -1,17 +1,17 @@
-Level 7
+Level 8
 
-You feel a wall right in front of you and an opening behind you.
+You hear the mumbling of wizards. Beware of their deadly wands! Good thing you found a bow.
 
-Tip: You are not as effective at attacking backward. Use warrior.feel.wall? and warrior.pivot! to turn around.
+Tip: Use warrior.look to determine your surroundings, and warrior.shoot! to fire an arrow.
 
  ------
-|>a S @|
+|@ Cww>|
  ------
 
   > = Stairs
   @ = Jarrod (20 HP)
-  a = Archer (7 HP)
-  S = Thick Sludge (24 HP)
+  C = Captive (1 HP)
+  w = Wizard (3 HP)
 
 
 Available Abilities:
@@ -19,20 +19,26 @@ Available Abilities:
   warrior.attack!
     Attack the unit in given direction (forward by default).
 
+  warrior.look
+    Returns an array of Spaces in given direction (forward by default).
+
   warrior.pivot!
     Rotate :left, :right or :backward (default)
 
   warrior.rest!
     Gain 10% of max health back, but do nothing more.
 
-  warrior.walk!
-    Move in given direction (forward by default).
-
   warrior.feel
     Returns a Space for the given direction (forward by default).
 
-  warrior.health
-    Returns an integer representing your health.
+  warrior.walk!
+    Move in given direction (forward by default).
+
+  warrior.shoot!
+    Shoot your bow & arrow in given direction (forward by default).
 
   warrior.rescue!
     Rescue a captive from his chains (earning 20 points) in given direction (forward by default).
+
+  warrior.health
+    Returns an integer representing your health.
