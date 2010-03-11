@@ -1,24 +1,21 @@
-Level 5
+Level 6
 
-You hear cries for help. Captives must need rescuing.
+The wall behind you feels a bit further away in this room. And you hear more cries for help.
 
-Tip: Use warrior.feel.captive? to see if there's a captive, and warrior.rescue! to rescue him. Don't attack captives.
+Tip: You can walk backward by passing ':backward' as an argument to walk!. Same goes for feel, rescue! and attack!.
 
- -------
-|@ CaaSC|
- -------
+ --------
+|C @ S aa|
+ --------
 
   > = Stairs
   @ = Jarrod (20 HP)
   C = Captive (1 HP)
-  a = Archer (7 HP)
   S = Thick Sludge (24 HP)
+  a = Archer (7 HP)
 
 
 Available Abilities:
-
-  warrior.rescue!
-    Rescue a captive from his chains (earning 20 points) in given direction (forward by default).
 
   warrior.attack!
     Attack the unit in given direction (forward by default).
@@ -26,11 +23,14 @@ Available Abilities:
   warrior.rest!
     Gain 10% of max health back, but do nothing more.
 
+  warrior.feel
+    Returns a Space for the given direction (forward by default).
+
   warrior.walk!
     Move in given direction (forward by default).
 
-  warrior.feel
-    Returns a Space for the given direction (forward by default).
+  warrior.rescue!
+    Rescue a captive from his chains (earning 20 points) in given direction (forward by default).
 
   warrior.health
     Returns an integer representing your health.
