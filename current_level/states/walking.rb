@@ -1,12 +1,6 @@
 class Walking < State
   def self.enter(player)
-    if player.feel.captive?
-      player.current_state = Rescuing
-    elsif player.feel.enemy?
-      player.current_state = Attacking
-    else
-      player.walk!
-    end
+    player.walk!
   end
 
   def self.exit(player)
@@ -25,4 +19,5 @@ class Walking < State
       end
     end
   end
+
 end

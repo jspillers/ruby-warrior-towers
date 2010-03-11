@@ -3,14 +3,12 @@
 # state but very often you need a more general state that can transition into any state
 class Idle < State
   def self.enter(player)
-    puts "entering #{self.to_s} state..."
-  end
 
-  def self.exit(player)
-    puts "exiting #{self.to_s} state..."
-  end
+    # im all rested up and ready to move on
+    if player.health_full? && !player.feel.enemy? && !player.under_attack?
+      player.current_state = Walking
+    end
 
-  def self.execute(player)
     # if engaged with enemy and not below health danger threshold
     # then attack the enemy
     if player.feel.enemy? && !player.health_danger?
@@ -26,11 +24,6 @@ class Idle < State
     # if under attack but no enemy touching then charge!
     if player.under_attack? && !player.feel.enemy?
       player.current_state = Advancing
-    end
-
-    # im all rested up and ready to move on
-    if player.health_full? && !player.feel.enemy? && !player.under_attack?
-      player.current_state = Walking
     end
 
     # not under attack or adjacent to any enemy but not full health
@@ -51,6 +44,13 @@ class Idle < State
         player.current_state = Resting
       end
     end
+  end
 
+  def self.exit(player)
+  end
+
+  def self.execute(player)
+    # should never execute in idle... idle should only change to another state on enter
+    # idle is more or less a 'what should i do next' decision state
   end
 end

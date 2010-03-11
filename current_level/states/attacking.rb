@@ -7,7 +7,7 @@ class Attacking < State
   end
 
   def self.execute(player)
-    if player.health_danger?
+    if player.health_danger? && !player.feel_archer?
       player.current_state = Retreating
     else
       if player.feel.enemy?

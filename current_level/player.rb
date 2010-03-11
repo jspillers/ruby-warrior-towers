@@ -1,5 +1,8 @@
 require 'state'
 require 'state_machine'
+require 'sensory_extension'
+
+# snag all the state class definitions
 Dir["#{File.dirname(__FILE__)}/states/**/*.rb"].each { |f| require f }
 
 class Player
@@ -8,12 +11,14 @@ class Player
   DANGER_HEALTH = 10
   CRIT_HEALTH = 3
 
-  include StateMachine
+  DIRS = [:forward, :right, :backward, :left]
 
-  attr_accessor :warrior, :current_action, :turn_count, :health_history, :action_history
+  include StateMachine
+  include SensoryExtension
+
+  attr_accessor :warrior, :turn_count, :health_history, :action_history
 
   def initialize
-    @current_state = Idle
     @turn_count = 0
     @health_history = [MAX_HEALTH]
     @action_history = {
@@ -26,8 +31,13 @@ class Player
   def play_turn(warrior)
     @turn_count += 1
     @warrior = warrior
-    current_state.execute(self)
     @health_history << @warrior.health
+
+    if @turn_count == 1
+      self.current_state = Idle 
+    else
+      current_state.execute(self)
+    end
   end
 
   def under_attack?
@@ -50,11 +60,11 @@ class Player
     @health_history[@turn_count - 1]
   end
 
-  # this creates a method for each action we are trying to track.
-  # We first start by calling these actions on the player object 
-  # rather than the warrior object so that we can log their occurence
-  # in time and then delegate back to the warrior object that 
-  # actually performs the action
+  # this creates a method for each action type being tracked in @action_history
+  # allowing the events to be put into this array in a single place rather
+  # than sprinkled all throughout the various state classes...
+  # after logging the event then delegate the method back to warrior 
+  # (which actually performs the action)
   [:attack!, :rescue!, :walk!].each do |meth|
 
     action_type = meth.to_s.gsub('!','').to_sym
@@ -79,10 +89,9 @@ class Player
     end
   end
 
-  # attempt to delegate methods to the warrior
-  # class to make state implementations cleaner
-  # and allow tracking of said method calls where 
-  # needed (ie: in @action_history)
+  # attempts to delegate unknown methods to the warrior object so 
+  # that the player object becomes the single context interface 
+  # needed within the state classes
   def method_missing(method, *args)
     if @warrior.respond_to?(method)
       @warrior.send(method.to_sym, *args)

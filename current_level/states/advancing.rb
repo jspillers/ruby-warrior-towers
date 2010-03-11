@@ -1,8 +1,6 @@
 class Advancing < State
   def self.enter(player)
-    if player.feel.captive?
-      player.rescue!
-    elsif player.feel.enemy?
+    if player.feel.enemy?
       player.attack!
     else
       player.walk!

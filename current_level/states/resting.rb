@@ -10,7 +10,7 @@ class Resting < State
     if player.under_attack?
       player.current_state = Advancing
     else
-      if player.health_full?
+      if !player.health_full?
         player.rest!
       else
         player.current_state = Walking
