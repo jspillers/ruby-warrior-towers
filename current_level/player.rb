@@ -1,20 +1,21 @@
 require 'state'
 require 'state_machine'
 require 'sensory_extension'
+require 'unit_extension'
 
 # snag all the state class definitions
 Dir["#{File.dirname(__FILE__)}/states/**/*.rb"].each { |f| require f }
 
 class Player
 
+  include StateMachine
+  include SensoryExtension
+
   MAX_HEALTH = 20
   DANGER_HEALTH = 10
   CRIT_HEALTH = 3
 
   DIRS = [:forward, :right, :backward, :left]
-
-  include StateMachine
-  include SensoryExtension
 
   attr_accessor :warrior, :turn_count, :health_history, :action_history, :current_direction
 

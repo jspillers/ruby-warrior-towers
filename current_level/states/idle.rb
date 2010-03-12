@@ -5,13 +5,13 @@ class Idle < State
   def self.enter(player)
 
     # im all rested up and ready to move on
-    if player.health_full? && !player.feel.enemy? && !player.los_to_nearest_enemy? && !player.under_attack?
+    if player.health_full? && !player.feel.enemy? && !player.first_enemy_in_los && !player.under_attack?
       player.current_state = Walking
     end
 
     # if engaged with enemy and not below health danger threshold
     # then attack the enemy
-    if (player.feel.enemy? || player.los_to_nearest_enemy?) && !player.health_danger?
+    if (player.feel.enemy? || player.first_enemy_in_los) && !player.health_danger?
       player.current_state = Attacking
     end
 
