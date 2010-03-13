@@ -11,8 +11,6 @@ class Attacking < State
   end
 
   def self.execute(player)
-    puts player.all_enemies_in_los.map {|e| e[1].class.to_s}.inspect
-
     if player.health_danger?
       player.current_state = Retreating
     else

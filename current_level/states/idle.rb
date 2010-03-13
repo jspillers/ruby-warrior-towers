@@ -7,21 +7,16 @@ class Idle < State
     # enemies in range?
     if !player.all_enemies_in_los.empty?
       player.current_state = Attacking
-    end
 
-    # if there is a captive in front of you and not an enemy then
-    # rescue that poor sap
-    if player.feel.captive? && player.all_enemies_in_los.empty?
+    elsif !player.see_captive?.empty? && !player.see_archer? && !player.see_wizard? && player.health_full?
       player.current_state = Rescuing
-    end
 
     # not under attack or adjacent to any enemy but not full health
-    if !player.health_full? && player.all_enemies_in_los.empty?
+    elsif !player.health_full? && player.all_enemies_in_los.empty?
       player.current_state = Resting
-    end
 
     # im all rested up and ready to move on
-    if player.health_full? && player.all_enemies_in_los.empty?
+    else
       player.current_state = Walking
     end
   end

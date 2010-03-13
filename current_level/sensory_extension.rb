@@ -42,11 +42,7 @@ module SensoryExtension
     loc = look_array.index(nearest_enemy_space)
 
     if loc
-      if loc == 0 # enemy is in adjacent space
-        nil
-      else
-        return look_array[loc].unit if look_array[0..(loc-1)].all? {|s| s.empty? }
-      end
+      look_array[loc].unit if look_array[0..(loc-1)].all? {|s| s.empty? }
     end
   end
 
@@ -68,6 +64,21 @@ module SensoryExtension
 
   def see_wizard?
     !all_enemies_in_los.select {|e| e[1].class == RubyWarrior::Units::Wizard }.empty?
+  end
+
+  def see_captive?
+    captives = []
+    Player::DIRS.each do |dir|
+      look_array = @warrior.look(dir)
+      nearest_captive_space = look_array.detect {|s| s.captive? }
+      loc = look_array.index(nearest_captive_space)
+
+      if loc && (loc == 0 || look_array[0..(loc-1)].all? {|s| s.empty? })
+        captives << dir 
+      end
+    end
+
+    captives
   end
 
 end

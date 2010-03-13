@@ -13,6 +13,8 @@ class Resting < State
   def self.execute(player)
     if !player.all_enemies_in_los.empty?
       player.current_state = Attacking
+    elsif !player.see_captive?.empty?
+      player.current_state = Rescuing
     else
       if !player.health_full?
         player.rest!

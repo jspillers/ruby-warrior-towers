@@ -19,7 +19,7 @@ class Walking < State
       else
         if player.feel.enemy?
           player.current_state = Attacking
-        elsif player.feel.captive?
+        elsif !player.see_captive?.empty?
           player.current_state = Rescuing
         else
           player.walk!
