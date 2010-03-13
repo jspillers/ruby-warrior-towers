@@ -14,13 +14,13 @@ class Walking < State
     if player.feel.wall?
       player.pivot!(player.opposite_direction)
     else
-      if player.under_attack?
-        player.current_state = Advancing
+      if !player.all_enemies_in_los.empty?
+        player.current_state = Attacking
       else
-        if player.feel.captive?
-          player.current_state = Rescuing
-        elsif player.feel.enemy?
+        if player.feel.enemy?
           player.current_state = Attacking
+        elsif player.feel.captive?
+          player.current_state = Rescuing
         else
           player.walk!
         end

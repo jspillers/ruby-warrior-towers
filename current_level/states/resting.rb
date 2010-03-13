@@ -1,7 +1,7 @@
 class Resting < State
   def self.enter(player)
-    if player.under_attack?
-      player.current_state = Advancing
+    if !player.all_enemies_in_los.empty?
+      player.current_state = Attacking
     else
       player.rest!
     end
@@ -11,8 +11,8 @@ class Resting < State
   end
 
   def self.execute(player)
-    if player.under_attack?
-      player.current_state = Advancing
+    if !player.all_enemies_in_los.empty?
+      player.current_state = Attacking
     else
       if !player.health_full?
         player.rest!

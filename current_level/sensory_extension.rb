@@ -18,13 +18,10 @@ module SensoryExtension
   def all_enemies_in_los
     enemies = {}
     Player::DIRS.each do |dir|
-      enemies[dir] = first_enemy_in_los(dir)
+      enemies[dir] = first_enemy_in_los_for_direction(dir)
     end
-    enemies
-  end
 
-  def sorted_threats
-    res = all_enemies_in_los.sort do |a,b| 
+    sorted_enemies = enemies.sort do |a,b| 
       a_threat_lvl = a[1].nil? ? 0 : a[1].threat_level
       b_threat_lvl = b[1].nil? ? 0 : b[1].threat_level
       b_threat_lvl <=> a_threat_lvl 
@@ -32,11 +29,11 @@ module SensoryExtension
 
     # directions with no enemies in los are not a threat
     # delete directions with nil values
-    res.delete_if {|k,v| v.nil?} 
-    res.flatten.empty? ? nil : res
+    sorted_enemies.delete_if {|k,v| v.nil?} 
+    sorted_enemies.flatten.empty? ? [] : sorted_enemies
   end
 
-  def first_enemy_in_los(dir=nil)
+  def first_enemy_in_los_for_direction(dir=nil)
     direction = dir || @current_direction
 
     look_array = @warrior.look(direction)
@@ -53,24 +50,10 @@ module SensoryExtension
     end
   end
 
-  def feel_sludge?
-    unless self.feel.empty? 
-      self.feel.unit == RubyWarrior::Units::Sludge || self.feel.unit == RubyWarrior::Units::ThickSludge
-    end
-  end
-
   def feel_archer?
     unless self.feel.empty? 
       self.feel.unit == RubyWarrior::Units::Archer
     end
-  end
-
-  def see_archer?
-    nearest_enemy_space.unit == RubyWarrior::Units::Archer if nearest_enemy_space
-  end
-
-  def los_to_archer?
-    see_archer? && first_enemy_in_los
   end
 
   def feel_wizard?
@@ -79,11 +62,12 @@ module SensoryExtension
     end
   end
 
-  def see_wizard?
-    nearest_enemy_space.unit == RubyWarrior::Units::Wizard if nearest_enemy_space
+  def see_archer?
+    !all_enemies_in_los.select {|e| e[1].class == RubyWarrior::Units::Archer }.empty?
   end
 
-  def los_to_wizard?
-    see_wizard? && first_enemy_in_los
+  def see_wizard?
+    !all_enemies_in_los.select {|e| e[1].class == RubyWarrior::Units::Wizard }.empty?
   end
+
 end
